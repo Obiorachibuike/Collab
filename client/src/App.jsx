@@ -5,6 +5,7 @@ import { ThemeProvider, useTheme } from './context/ThemeContext.jsx'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
+import PrivateRoute from './components/PrivateRoute'
 
 function ThemeToggle() {
   const { darkMode, setDarkMode } = useTheme()
@@ -23,7 +24,12 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          } />
+          {/* <Route path="/dashboard" element={  <Dashboard />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/" />} />

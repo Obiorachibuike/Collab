@@ -1,3 +1,4 @@
+// models/Task.js
 import mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema({
@@ -5,6 +6,7 @@ const taskSchema = new mongoose.Schema({
   description: String,
   status: { type: String, enum: ['Todo', 'In Progress', 'Done'], default: 'Todo' },
   priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' },
+  board: { type: mongoose.Schema.Types.ObjectId, ref: 'Board', required: true }, // ✅ Link to Board
   assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updatedAt: { type: Date, default: Date.now },

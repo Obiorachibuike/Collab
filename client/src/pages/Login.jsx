@@ -20,7 +20,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f3e7e9] to-[#e3eeff] dark:from-gray-900 dark:to-gray-800 transition-all duration-500 px-6">
       <LoginForm onSubmit={handleLogin} />
     </div>
   )

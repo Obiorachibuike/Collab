@@ -6,6 +6,6 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [ tailwindcss(),react()],
   server: {
-    proxy: { '/api': 'https://collab-icwm.onrender.com' },
+    proxy: { '/api': 'http://localhost:5000' },
   },
 })

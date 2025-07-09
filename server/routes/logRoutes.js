@@ -1,8 +1,10 @@
-import express from 'express';
-import { protect } from '../middleware/auth.js';
-import { getLogs } from '../controllers/logController.js';
+// routes/logRoutes.js
+import express from 'express'
+import { protect } from '../middleware/auth.js'
+import { getLogs } from '../controllers/logController.js'
 
-const router = express.Router();
-router.get('/', protect, getLogs);
+const router = express.Router()
 
-export default router;
+router.get('/', protect, getLogs)
+
+export default router

@@ -31,7 +31,7 @@ const taskRoutes = (io) => {
    *       401:
    *         description: Unauthorized
    */
-  router.get('/', protect, getTasks);
+  router.get('/', protect, getTasks(io));
 
   /**
    * @swagger

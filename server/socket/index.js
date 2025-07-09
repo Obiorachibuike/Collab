@@ -1,48 +1,74 @@
 const initSocket = (io) => {
   io.on('connection', (socket) => {
-    console.log(`✅ Socket connected: ${socket.id}`)
+    console.log(`✅ Socket connected: ${socket.id}`);
 
-    // Join a specific board room
-    socket.on('joinBoard', (boardId) => {
-      socket.join(boardId)
-      console.log(`🔗 Socket ${socket.id} joined board ${boardId}`)
-    })
+    // 🏢 Join a specific workspace room
+    socket.on('joinWorkspace', (workspaceId) => {
+      if (!workspaceId) return;
+      socket.join(workspaceId);
+      console.log(`🔗 Socket ${socket.id} joined workspace ${workspaceId}`);
+    });
 
-    // Leave a specific board room
-    socket.on('leaveBoard', (boardId) => {
-      socket.leave(boardId)
-      console.log(`🚪 Socket ${socket.id} left board ${boardId}`)
-    })
+    // 🚪 Leave a specific workspace room
+    socket.on('leaveWorkspace', (workspaceId) => {
+      if (!workspaceId) return;
+      socket.leave(workspaceId);
+      console.log(`🚪 Socket ${socket.id} left workspace ${workspaceId}`);
+    });
 
-    // Example: Task created
-    socket.on('taskCreated', ({ boardId, task }) => {
-      if (boardId) {
-        io.to(boardId).emit('taskCreated', task)
-        console.log(`📦 Task broadcast to board ${boardId}:`, task.title)
+    // 📦 Task created in a board (column) inside a workspace
+    socket.on('taskCreated', ({ workspaceId, task }) => {
+      if (workspaceId && task) {
+        io.to(workspaceId).emit('taskCreated', task);
+        console.log(`📦 Task created in workspace ${workspaceId}: ${task.title}`);
       }
-    })
+    });
 
-    // Example: Task updated
-    socket.on('taskUpdated', ({ boardId, task }) => {
-      if (boardId) {
-        io.to(boardId).emit('taskUpdated', task)
-        console.log(`✏️ Task updated on board ${boardId}:`, task.title)
+    // ✏️ Task updated
+    socket.on('taskUpdated', ({ workspaceId, task }) => {
+      if (workspaceId && task) {
+        io.to(workspaceId).emit('taskUpdated', task);
+        console.log(`✏️ Task updated in workspace ${workspaceId}: ${task.title}`);
       }
-    })
+    });
 
-    // Example: Task deleted
-    socket.on('taskDeleted', ({ boardId, taskId }) => {
-      if (boardId) {
-        io.to(boardId).emit('taskDeleted', taskId)
-        console.log(`🗑️ Task deleted from board ${boardId}:`, taskId)
+    // 🗑️ Task deleted
+    socket.on('taskDeleted', ({ workspaceId, taskId }) => {
+      if (workspaceId && taskId) {
+        io.to(workspaceId).emit('taskDeleted', taskId);
+        console.log(`🗑️ Task deleted in workspace ${workspaceId}: ${taskId}`);
       }
-    })
+    });
 
-    // Disconnect event
+    // 📁 Board (column) created in workspace
+    socket.on('boardCreated', ({ workspaceId, board }) => {
+      if (workspaceId && board) {
+        io.to(workspaceId).emit('boardCreated', board);
+        console.log(`📁 Board created in workspace ${workspaceId}: ${board.name}`);
+      }
+    });
+
+    // 🛠️ Board updated
+    socket.on('boardUpdated', ({ workspaceId, board }) => {
+      if (workspaceId && board) {
+        io.to(workspaceId).emit('boardUpdated', board);
+        console.log(`🛠️ Board updated in workspace ${workspaceId}: ${board.name}`);
+      }
+    });
+
+    // 💥 Board deleted
+    socket.on('boardDeleted', ({ workspaceId, boardId }) => {
+      if (workspaceId && boardId) {
+        io.to(workspaceId).emit('boardDeleted', boardId);
+        console.log(`💥 Board deleted in workspace ${workspaceId}: ${boardId}`);
+      }
+    });
+
+    // ❌ Disconnect
     socket.on('disconnect', () => {
-      console.log(`❌ Socket disconnected: ${socket.id}`)
-    })
-  })
-}
+      console.log(`❌ Socket disconnected: ${socket.id}`);
+    });
+  });
+};
 
-export default initSocket
+export default initSocket;
